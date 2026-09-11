@@ -1,0 +1,24 @@
+{
+  "_README": "SAMPLE project-level settings.json (optional). Copy to <repo>/.claude/settings.json to add project-level deny-rules — complementing the plugin's guardrail hooks (not replacing them). Independent of the subscription tier.",
+  "permissions": {
+    "deny": [
+      "Read(./**/.env)",
+      "Read(./**/.env.*)",
+      "Read(./**/*.pem)",
+      "Read(./**/*.key)",
+      "Read(./**/*.p12)",
+      "Read(./**/*.jks)",
+      "Read(./**/*.keystore)",
+      "Read(./**/id_rsa)",
+      "Edit(./**/.env)",
+      "Write(./**/.env)",
+      "Bash(git push --force*)",
+      "Bash(terraform apply*)",
+      "Bash(terraform destroy*)"
+    ],
+    "ask": [
+      "Bash(kubectl*)",
+      "Bash(helm*)"
+    ]
+  }
+}

@@ -1,0 +1,165 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Chapter Forge -- SDLC Graph — source of truth (machine-readable) for the SDLC pipeline.
+# Read by: sdlc-status command (where are we), sdlc-gate (check exit criteria),
+#          MCP chapter-context (get_sdlc_state).
+# Each feature keeps its state in .chapter-forge/sdlc-state.json inside the respective repo.
+# ─────────────────────────────────────────────────────────────────────────────
+version: "0.1.0"
+
+principles:
+  - {id: P1, name: "Security & Compliance by Design"}
+  - {id: P2, name: "Shift-Left"}
+  - {id: P3, name: "End-to-end Traceability"}
+  - {id: P4, name: "Segregation of Duties (SoD)"}
+  - {id: P5, name: "Four-eyes / Maker–Checker"}
+  - {id: P6, name: "Automate the repetitive, Gate the risky"}
+
+# Allowed AI autonomy level per phase (L1 assistive · L2 supervised · L3 autonomous-sandbox)
+phases:
+  - id: 1
+    key: discover
+    name: "Discovery & Requirements"
+    command: /chapter-forge:sdlc-discover
+    agents: [requirements-analyst, compliance-checker]
+    ai_autonomy: L2
+    artifacts: [BRD/PRD, Data Classification, Risk Register, Compliance Scope]
+    exit_gate: G0
+    next: 2
+
+  - id: 2
+    key: design
+    name: "Design & Architecture"
+    command: /chapter-forge:sdlc-design
+    agents: [solution-architect, threat-modeler, security-reviewer]
+    ai_autonomy: L2
+    artifacts: [HLD/LLD, Threat Model, ADRs, API Spec, Security Sign-off]
+    exit_gate: G1
+    next: 3
+
+  - id: 3
+    key: plan
+    name: "Planning & Backlog"
+    command: /chapter-forge:sdlc-plan
+    agents: [requirements-analyst, test-engineer]
+    ai_autonomy: L2
+    artifacts: [Refined Backlog, Test Plan, Release Plan]
+    exit_gate: null   # DoR check, not a hard gate
+    next: 4
+
+  - id: 4
+    key: develop
+    name: "Development"
+    command: /chapter-forge:sdlc-develop
+    agents: [dev-executor, code-reviewer, security-reviewer]
+    ai_autonomy: L3   # in sandbox, STOP at the PR
+    loop: "dev → test → review → fix, until the CI gate is green; stop at the PR (human sign-off)"
+    artifacts: [Code, Unit tests (≥80%), PR Reviews, SAST/SCA Report]
+    exit_gate: CI
+    next: 5
+
+  - id: 5
+    key: test
+    name: "Testing & QA"
+    command: /chapter-forge:sdlc-test
+    agents: [test-engineer, security-reviewer]
+    ai_autonomy: L3   # test-gen + synthetic data + regression in sandbox
+    artifacts: [Test Results, UAT Sign-off, Pentest Report, Perf Report]
+    exit_gate: G2
+    next: 6
+
+  - id: 6
+    key: release
+    name: "Release & Change Management"
+    command: /chapter-forge:sdlc-release
+    agents: [release-manager, compliance-checker]
+    ai_autonomy: L2
+    artifacts: [Change Request, Release Notes, Rollback Plan, CAB Approval]
+    exit_gate: G3
+    next: 7
+
+  - id: 7
+    key: deploy
+    name: "Deployment"
+    command: /chapter-forge:sdlc-deploy
+    agents: [release-manager]
+    ai_autonomy: L2         # digital cloud
+    ai_autonomy_core: L1    # core on-prem: assist only, no automation
+    artifacts: [Deployment Runbook, Deploy Logs, Artifact Signature, Smoke Test]
+    exit_gate: GO_LIVE
+    next: 8
+
+  - id: 8
+    key: operate
+    name: "Operations & Monitoring"
+    command: /chapter-forge:sdlc-operate
+    agents: [rca-agent, security-reviewer, doc-agent]
+    ai_autonomy: L2
+    artifacts: [Runbooks, Incident/PIR, Audit Logs, SLO Dashboard]
+    exit_gate: null
+    feedback_to: 1   # improvement loop
+
+# EXIT criteria for each gate — sdlc-gate checks this checklist.
+# Every gate is a risk decision: the approver is a HUMAN, AI only prepares the evidence.
+gates:
+  G0:
+    name: "Intake / Risk Gate"
+    approver: [Product Owner, Risk/Compliance]
+    criteria:
+      - "Business case approved"
+      - "Risks ranked"
+      - "Compliance scope (SBV/PCI/ISO) identified"
+      - "Data classified (any card data/PII?)"
+      - "No legal blockers"
+  G1:
+    name: "Design / Security Gate"
+    approver: [Architect, Security]
+    criteria:
+      - "Threat model (STRIDE) complete"
+      - "Architecture review passed"
+      - "SoD design & encryption at-rest/in-transit met"
+      - "ADR approved"
+  CI:
+    name: "Code / Build Gate (automated)"
+    approver: [CI, Human reviewer]
+    criteria:
+      - "PR approved by someone else (reviewer ≠ author/AI)"
+      - "CI green"
+      - "Coverage ≥ 80%"
+      - "0 SAST/SCA findings at Critical/High"
+      - "0 leaked secrets"
+  G2:
+    name: "Quality / Security Gate"
+    approver: [QA, Security, Product Owner]
+    criteria:
+      - "All Critical/High defects closed"
+      - "UAT signed off by the business"
+      - "Pentest: no remaining Critical/High vulnerabilities"
+      - "NFRs (performance/security) met"
+      - "Test data masked (no real data)"
+  G3:
+    name: "Change Approval Gate"
+    approver: [CAB, Release Manager, Risk/Compliance]
+    criteria:
+      - "CAB approves the Change Request"
+      - "Rollback plan tested"
+      - "SoD enforced (deployer ≠ developer)"
+      - "Release notes & runbook ready"
+  GO_LIVE:
+    name: "Go-Live Verification"
+    approver: [DevOps/SRE, Release Manager]
+    criteria:
+      - "Smoke test passed"
+      - "Health checks green"
+      - "Rollback within reach"
+      - "Monitoring/alerting enabled"
+
+# Service map (polyrepo) — MCP chapter-context enriches this at runtime.
+services:
+  - onward-accounts-service
+  - onward-onboarding-service
+  - transfer-payments-service
+  - feature_flag
+  - feature_flag_ui
+knowledge:
+  - banking-knowledge-base
+  - Onward-playbook

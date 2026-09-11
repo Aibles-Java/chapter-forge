@@ -1,0 +1,18 @@
+{
+  "name": "chapter-tools",
+  "owner": {
+    "name": "Chapter Engineering"
+  },
+  "metadata": {
+    "description": "Chapter internal marketplace — Claude Code tooling for the whole team.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "chapter-forge",
+      "source": "./",
+      "description": "Banking SDLC harness: agents, commands, skills, guardrail hooks, pipeline graph, chapter-context MCP.",
+      "category": "workflow"
+    }
+  ]
+}

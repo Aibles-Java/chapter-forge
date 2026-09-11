@@ -1,0 +1,15 @@
+# Node / MCP
+node_modules/
+dist/
+*.log
+
+# Local SDLC state (per-feature, not committed to the plugin repo)
+.chapter-forge/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# OMC runtime state (not part of the plugin)
+.omc/
