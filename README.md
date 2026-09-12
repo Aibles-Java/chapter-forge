@@ -4,6 +4,8 @@ A Claude Code harness that turns the **standard SDLC of the banking product** in
 
 > Goal: a member only needs to `install` one plugin to get the full process + guardrails + context, used consistently across every service.
 
+**Full usage guide (by phase and by role): [docs/README.md](./docs/README.md).**
+
 ---
 
 ## 1. Requirements
@@ -53,6 +55,8 @@ Start a feature and follow the pipeline:
 
 Get project context quickly (via the `chapter-context` MCP): `list_services`, `get_service`, `search_project`, `search_knowledge_base`, `get_sdlc_graph`, `get_sdlc_state`.
 
+For the full per-phase workflow (agents, guardrails, artifacts, exit criteria) and per-role use cases ("I'm a Product Owner/Architect/Developer/QA/..., what do I run?"), see [docs/README.md](./docs/README.md).
+
 ## 4. Guardrails (enabled automatically when the plugin is installed)
 
 - **PreToolUse** — block reading/writing secret·PII files (`.env`, `*.pem`, keys, certificates; scans for PAN/CVV/PRIVATE KEY on read) and **destructive/prod-touching commands** (`rm -rf /`, `git push --force main`, `kubectl … prod`, `terraform apply/destroy`, `DROP/TRUNCATE`, disabling audit…).
@@ -78,6 +82,7 @@ skills/           reference skills (overview, compliance, gate-criteria, threat-
 hooks/            hooks.json + guardrail scripts
 graph/            sdlc-graph.yaml — the pipeline source of truth
 mcp/chapter-context/  TypeScript MCP tapping into polyrepo context
+docs/             full usage guide — overview, per-phase workflow, guardrail reference, per-role use cases
 ```
 
 ## 7. Maintenance
