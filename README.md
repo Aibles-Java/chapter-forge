@@ -42,7 +42,7 @@ Start a feature and follow the pipeline:
 |---|---|---|
 | `/chapter-forge:sdlc-status` | — | Where you are in the pipeline, which gate is pending |
 | `/chapter-forge:sdlc-discover` | 1 → G0 | Requirements, data classification, risk register |
-| `/chapter-forge:sdlc-design` | 2 → G1 | HLD/LLD, threat model, ADR, API spec |
+| `/chapter-forge:sdlc-design` | 2 → G1 | HLD/LLD, threat model + sequence diagram, ADR, API spec, ERD, class diagram |
 | `/chapter-forge:sdlc-plan` | 3 | Refine backlog, test plan, DoR |
 | `/chapter-forge:sdlc-develop` | 4 → CI | TDD + independent review, stops at the PR |
 | `/chapter-forge:sdlc-test` | 5 → G2 | Test-gen, synthetic data, regression |
@@ -66,6 +66,7 @@ Get project context quickly (via the `chapter-context` MCP): `list_services`, `g
 - **Gates belong to humans.** The AI (agents/commands) only *prepares the evidence*; approving G0–G3 and deploying to prod is done by a human.
 - **Autonomy inversely proportional to risk.** L3 (automated) only in a sandbox with test coverage; on-prem core stays at L1.
 - **SoD/Four-eyes.** The review agent is independent from the code-writing agent.
+- **Review findings loop back, they don't get logged and forgotten.** In P2 (design), a CRITICAL/HIGH finding from `threat-modeler`/`security-reviewer` sends `solution-architect` back to revise the artifact — see the Group 4 convergence loop in `commands/sdlc-design.md`.
 
 ## 6. Structure
 

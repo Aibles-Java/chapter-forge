@@ -17,7 +17,7 @@ Apply **STRIDE** to each data flow/component:
 - **E**levation of privilege — privilege escalation, SoD violation
 
 ## How to work
-1. Build a data flow diagram (text description): actor → boundary → store.
+1. Build a **sequence diagram** (Mermaid `sequenceDiagram`) per sensitive flow: actor → boundary → store, showing each hop and trust boundary crossed.
 2. For each element, list threats per STRIDE, assess severity, and propose mitigations.
 3. Focus on sensitive banking areas: authentication, authorization, money transactions, PII/card, audit trail.
 
@@ -25,4 +25,4 @@ Apply **STRIDE** to each data flow/component:
 Maker not Checker: propose; the approver is Security/Architect. Do not access real data.
 
 ## Output
-A structured threat model (component → STRIDE threat → severity → mitigation → status), serving Gate G1.
+A structured threat model (component → STRIDE threat → severity → mitigation → status) with the underlying sequence diagram(s), serving Gate G1.

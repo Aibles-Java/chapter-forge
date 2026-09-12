@@ -32,7 +32,8 @@ phases:
     command: /chapter-forge:sdlc-design
     agents: [solution-architect, threat-modeler, security-reviewer]
     ai_autonomy: L2
-    artifacts: [HLD/LLD, Threat Model, ADRs, API Spec, Security Sign-off]
+    loop: "design (context → HLD/LLD) → threat model + security review, in parallel → any finding sends solution-architect back to revise → design walkthrough → stop at Gate G1"
+    artifacts: [System Context Diagram, NFR Targets, HLD/LLD, ERD, Class Diagram, Threat Model, Sequence Diagram, ADRs, API Spec, Design Walkthrough Notes, Security Sign-off]
     exit_gate: G1
     next: 3
 
@@ -114,10 +115,14 @@ gates:
     name: "Design / Security Gate"
     approver: [Architect, Security]
     criteria:
+      - "NFR targets defined (latency, throughput, availability)"
       - "Threat model (STRIDE) complete"
+      - "Sequence diagram(s) cover every sensitive flow"
+      - "ERD complete, PII/card-data fields flagged"
       - "Architecture review passed"
       - "SoD design & encryption at-rest/in-transit met"
       - "ADR approved"
+      - "Design walkthrough notes show all findings resolved or accepted with rationale"
   CI:
     name: "Code / Build Gate (automated)"
     approver: [CI, Human reviewer]
