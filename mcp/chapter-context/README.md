@@ -59,6 +59,7 @@ Example configuration in an MCP client:
 | `get_service(name)` | README + top-level structure + main build/manifest file of a service. |
 | `search_project(query, maxResults?)` | Search text across the whole workspace (path:line + snippet). Prefers `rg`, falls back to an fs walk. |
 | `search_knowledge_base(query)` | Search in banking-knowledge-base + Onward-playbook/content. |
+| `get_playbook(topic?)` | List docs in Onward-playbook/content, or read the best-matching one by topic keyword. |
 | `get_sdlc_graph` | Return the content of `graph/sdlc-graph.yaml`. |
 | `get_sdlc_state(repo?)` | Read `.chapter-forge/sdlc-state.json` (for a given repo or across the whole workspace) → phase/gate. |
 
