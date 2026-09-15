@@ -18,9 +18,10 @@ Package everything the CAB needs to approve a change, and prove SoD holds betwee
 
 1. Check Gate G2 is approved; stop with a warning if not.
 2. `release-manager` drafts the Change Request, Release Notes, and Rollback Plan.
-3. `compliance-checker` cross-checks compliance obligations and verifies SoD.
-4. Update state (`current_phase: release`, `pending_gate: G3`).
-5. Run the Gate G3 check and present the dossier to the CAB.
+3. `compliance-checker` cross-checks compliance obligations and verifies SoD, against the Group 2 output.
+4. **Convergence loop:** any compliance gap or SoD violation sends `release-manager` back to revise the Change Request/Rollback Plan; repeat until confirmed clean.
+5. Update state (`current_phase: release`, `pending_gate: G3`).
+6. Run the Gate G3 check and present the dossier to the CAB.
 
 ## Guardrails active in this phase
 

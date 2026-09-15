@@ -18,9 +18,10 @@ Turn production signal (logs, metrics, incidents) into root causes, a Post-Incid
 ## Workflow
 
 1. If investigating an incident: `rca-agent` reads logs/metrics/traces (via the `chapter-context` MCP or observability tools), builds a timeline, proposes root-cause hypotheses with evidence for/against and a confidence level, drafts the PIR.
-2. `security-reviewer` is engaged when the incident is security-related; `doc-agent` updates the runbook/ADR.
-3. Consolidate: timeline, hypotheses table, proposed actions, PIR draft.
-4. Capture lessons learned → feed back to the backlog (loop to P1 Discovery).
+2. `security-reviewer` is engaged when the incident is security-related; `doc-agent` updates the runbook/ADR — in parallel with step 1, not strictly after.
+3. **Convergence loop:** if `security-reviewer` disputes a hypothesis or surfaces evidence Group 1 missed, `rca-agent` revises the timeline/hypotheses; repeat until consistent.
+4. Consolidate: timeline, hypotheses table, proposed actions, PIR draft.
+5. Capture lessons learned → feed back to the backlog (loop to P1 Discovery).
 
 ## Guardrails active in this phase
 
