@@ -53,7 +53,7 @@ Start a feature and follow the pipeline:
 | `/chapter-forge:sdlc-operate` | 8 | Observability, RCA, PIR |
 | `/chapter-forge:sdlc-gate G2` | gate | Check the exit criteria of a gate |
 
-Get project context quickly (via the `chapter-context` MCP): `list_services`, `get_service`, `search_project`, `search_knowledge_base`, `get_sdlc_graph`, `get_sdlc_state`.
+Get project context quickly (via the `chapter-context` MCP): `list_services`, `get_service`, `search_project`, `search_knowledge_base`, `get_playbook`, `get_sdlc_graph`, `get_sdlc_state`.
 
 For the full per-phase workflow (agents, guardrails, artifacts, exit criteria) and per-role use cases ("I'm a Product Owner/Architect/Developer/QA/..., what do I run?"), see [docs/README.md](./docs/README.md).
 
