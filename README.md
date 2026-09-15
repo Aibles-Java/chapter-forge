@@ -45,7 +45,7 @@ Start a feature and follow the pipeline:
 | `/chapter-forge:sdlc-status` | — | Where you are in the pipeline, which gate is pending |
 | `/chapter-forge:sdlc-discover` | 1 → G0 | Requirements, data classification, risk register |
 | `/chapter-forge:sdlc-design` | 2 → G1 | HLD/LLD, threat model + sequence diagram, ADR, API spec, ERD, class diagram |
-| `/chapter-forge:sdlc-plan` | 3 | Refine backlog, test plan, DoR |
+| `/chapter-forge:sdlc-plan` | 3 | Refine backlog, test plan, release sketch, loop to DoR |
 | `/chapter-forge:sdlc-develop` | 4 → CI | TDD + independent review, stops at the PR |
 | `/chapter-forge:sdlc-test` | 5 → G2 | Test-gen, synthetic data, regression |
 | `/chapter-forge:sdlc-release` | 6 → G3 | Change Request, Release Notes, Rollback |

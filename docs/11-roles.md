@@ -70,7 +70,7 @@ Every role below maps to gate approvals defined in `graph/sdlc-graph.yaml`. "Com
 | Agents working for you | `test-engineer` (P3, P5) |
 | Phase docs | [04-phase-plan.md](./04-phase-plan.md), [06-phase-test.md](./06-phase-test.md) |
 
-**Typical flow:** in P3, `test-engineer` drafts the test strategy and Definition-of-Ready check. In P5, it generates test cases from acceptance criteria and builds **synthetic/masked data only** — real card data/PII must never enter a test fixture (PCI requirement, enforced partly by the PII guard on Read). If a test correctly fails, `test-engineer` reports a defect rather than loosening the test.
+**Typical flow:** in P3, `test-engineer` drafts the test strategy and test data plan alongside `requirements-analyst`'s backlog refinement; any story that fails the Definition of Ready loops back for revision rather than entering the sprint half-ready. In P5, it generates test cases from acceptance criteria and builds **synthetic/masked data only** — real card data/PII must never enter a test fixture (PCI requirement, enforced partly by the PII guard on Read). If a test correctly fails, `test-engineer` reports a defect rather than loosening the test.
 
 ---
 
@@ -80,11 +80,11 @@ Every role below maps to gate approvals defined in `graph/sdlc-graph.yaml`. "Com
 
 | | |
 |---|---|
-| Commands you run | `/chapter-forge:sdlc-release`, `/chapter-forge:sdlc-deploy`, `/chapter-forge:sdlc-gate G3`, `/chapter-forge:sdlc-gate GO_LIVE` |
-| Agents working for you | `release-manager` (P6, P7), `compliance-checker` (SoD check at P6) |
-| Phase docs | [07-phase-release.md](./07-phase-release.md), [08-phase-deploy.md](./08-phase-deploy.md) |
+| Commands you run | `/chapter-forge:sdlc-plan`, `/chapter-forge:sdlc-release`, `/chapter-forge:sdlc-deploy`, `/chapter-forge:sdlc-gate G3`, `/chapter-forge:sdlc-gate GO_LIVE` |
+| Agents working for you | `release-manager` (P3 sketch, P6, P7), `compliance-checker` (SoD check at P6) |
+| Phase docs | [04-phase-plan.md](./04-phase-plan.md), [07-phase-release.md](./07-phase-release.md), [08-phase-deploy.md](./08-phase-deploy.md) |
 
-**Typical flow:** after G2, run `/chapter-forge:sdlc-release` to get the Change Request, Release Notes, and a tested Rollback Plan ready for CAB. After G3, run `/chapter-forge:sdlc-deploy "<service+env>"` — remember **core on-prem systems stay at autonomy L1**: the agent only assists with the runbook, a human executes the actual deployment via PAM. Digital/cloud services can go to L2 (agent verifies canary/blue-green steps).
+**Typical flow:** as early as P3, `release-manager` sketches a lightweight release plan (target train, rollback outline) alongside backlog refinement — enough to surface release-blocking assumptions before development starts. After G2, run `/chapter-forge:sdlc-release` to turn that sketch into the full Change Request, Release Notes, and a tested Rollback Plan ready for CAB. After G3, run `/chapter-forge:sdlc-deploy "<service+env>"` — remember **core on-prem systems stay at autonomy L1**: the agent only assists with the runbook, a human executes the actual deployment via PAM. Digital/cloud services can go to L2 (agent verifies canary/blue-green steps).
 
 ---
 
