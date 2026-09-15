@@ -41,10 +41,17 @@ phases:
     key: plan
     name: "Planning & Backlog"
     command: /chapter-forge:sdlc-plan
-    agents: [requirements-analyst, test-engineer]
+    agents: [requirements-analyst, test-engineer, release-manager]
     ai_autonomy: L2
-    artifacts: [Refined Backlog, Test Plan, Release Plan]
-    exit_gate: null   # DoR check, not a hard gate
+    loop: "refine backlog + draft test strategy, in parallel → check each story against DoR → any story that fails DoR sends requirements-analyst/test-engineer back to revise → repeat until every story is ready or explicitly deferred"
+    artifacts: [Refined Backlog, Test Plan, Release Plan Sketch]
+    exit_gate: null   # DoR check, not a hard gate — self-enforced, see dor_criteria
+    dor_criteria:
+      - "Requirements are clear and testable"
+      - "Data touched by the story is classified (PII/card or not)"
+      - "Security impact assessed (flagged for security-reviewer if relevant)"
+      - "Story is estimated"
+      - "Test approach is deterministic (covered by the P3 test strategy)"
     next: 4
 
   - id: 4
