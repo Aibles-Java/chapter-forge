@@ -17,11 +17,13 @@ Implement per spec with TDD, loop until green, then hand off to independent revi
 
 ## Workflow
 
-1. `dev-executor` implements per spec with TDD, following the `secure-coding-banking` skill; coverage ≥ 80%, no hardcoded secrets, input validation at every boundary, parameterized queries.
-2. **Loop** (L3, sandboxed): dev → run tests → if red, fix → repeat until tests are green and lint is clean. `/oh-my-claudecode:ralph` or `ultrawork` can drive this loop.
-3. When code is ready, `code-reviewer` and `security-reviewer` review **independently** — reviewer ≠ author, preserving SoD. Every CRITICAL/HIGH must be fixed.
-4. Run the CI gate check: PR approved by someone else, CI green, coverage met, 0 SAST/SCA Critical/High, 0 leaked secrets.
-5. Update state (`current_phase: develop`, `pending_gate: CI`).
+1. **Intake:** check the story meets DoR (P3); pull P3 artifacts (Refined Backlog, Test Plan) and P2 artifacts (HLD/LLD, ADRs, API Spec) via `chapter-context` MCP so implementation matches the actual spec.
+2. `dev-executor` implements per spec with TDD, following the `secure-coding-banking` skill; coverage ≥ 80%, no hardcoded secrets, input validation at every boundary, parameterized queries, synthetic data (`synthetic-test-data` skill) in tests.
+3. **Loop** (L3, sandboxed): run tests → if red, fix → repeat until tests are green, lint is clean, and coverage ≥ 80%. `/oh-my-claudecode:ralph` or `ultrawork` can drive this loop.
+4. When code is ready, `code-reviewer` and `security-reviewer` review **independently** — reviewer ≠ author, preserving SoD.
+5. **Convergence loop:** any CRITICAL/HIGH finding sends `dev-executor` back to step 2/3 to fix — repeat until no unresolved CRITICAL/HIGH remains. `dev-executor` records a review summary (finding → fix, file:line) for the audit trail.
+6. Run the CI gate check: PR approved by someone else, CI green, coverage met, 0 SAST/SCA Critical/High, 0 leaked secrets.
+7. Update state (`current_phase: develop`, `pending_gate: CI`).
 
 **Stop at the PR.** `dev-executor` never merges or deploys, and never approves its own PR.
 

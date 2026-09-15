@@ -16,11 +16,12 @@ Turn a raw idea into a scoped, classified, risk-aware feature definition before 
 
 ## Workflow
 
-1. `requirements-analyst` drafts the BRD/PRD, user stories with acceptance criteria, detects contradictions/gaps, and proposes data classification + compliance scope.
-2. `compliance-checker` confirms the classification and lists the applicable SBV/PCI/ISO obligations.
-3. Consolidate artifacts: PRD, Data Classification, preliminary Risk Register.
-4. Write/update `.chapter-forge/sdlc-state.json` (`current_phase: discover`, `pending_gate: G0`).
-5. Run the Gate G0 check and present the checklist.
+1. `requirements-analyst` drafts the BRD/PRD, user stories with acceptance criteria, detects contradictions/gaps, and proposes a preliminary data classification + compliance scope.
+2. `compliance-checker` confirms the classification and lists the applicable SBV/PCI/ISO obligations, flagging any under/over-classification.
+3. **Convergence loop:** any disagreement sends `requirements-analyst` back to revise the PRD/classification; repeat until compliance confirms it.
+4. Consolidate artifacts: PRD, Data Classification, preliminary Risk Register.
+5. Write/update `.chapter-forge/sdlc-state.json` (`current_phase: discover`, `pending_gate: G0`).
+6. Run the Gate G0 check and present the checklist.
 
 ## Guardrails active in this phase
 

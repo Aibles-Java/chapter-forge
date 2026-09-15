@@ -16,11 +16,13 @@ Prove the feature meets its acceptance criteria and NFRs using data that is neve
 
 ## Workflow
 
-1. `test-engineer` generates test cases from acceptance criteria (happy path, edge cases, errors, security, idempotency — especially for payment flows), and builds **synthetic/masked data only** (see the `synthetic-test-data` skill).
-2. `security-reviewer` triages DAST/pentest results.
-3. Consolidate: test results, defect list, perf report, pentest status.
-4. Update state (`current_phase: test`, `pending_gate: G2`).
-5. Run the Gate G2 check and present the checklist.
+1. **Intake:** confirm Gate CI passed (P4 PR merged); pull the P3 Test Plan and the P4 SAST/SCA report via `chapter-context` MCP.
+2. `test-engineer` generates test cases from acceptance criteria (happy path, edge cases, errors, security, idempotency — especially for payment flows), and builds **synthetic/masked data only** (see the `synthetic-test-data` skill).
+3. `security-reviewer` triages DAST/pentest results, in parallel with test execution.
+4. **Convergence loop:** any Critical/High defect goes back to `dev-executor` (P4) for a fix if it's an implementation bug, or back to `test-engineer` if it's a test-approach gap. Repeat until no unresolved Critical/High remains.
+5. Consolidate: test results, defect list, perf report, pentest status.
+6. Update state (`current_phase: test`, `pending_gate: G2`).
+7. Run the Gate G2 check and present the checklist.
 
 ## Guardrails active in this phase
 

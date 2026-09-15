@@ -22,6 +22,7 @@ phases:
     command: /chapter-forge:sdlc-discover
     agents: [requirements-analyst, compliance-checker]
     ai_autonomy: L2
+    loop: "requirements-analyst drafts PRD/classification → compliance-checker confirms it → any disagreement sends requirements-analyst back to revise → repeat until confirmed → stop at Gate G0"
     artifacts: [BRD/PRD, Data Classification, Risk Register, Compliance Scope]
     exit_gate: G0
     next: 2
@@ -71,6 +72,7 @@ phases:
     command: /chapter-forge:sdlc-test
     agents: [test-engineer, security-reviewer]
     ai_autonomy: L3   # test-gen + synthetic data + regression in sandbox
+    loop: "test-gen + synthetic data, security/pentest in parallel → any Critical/High defect sends dev-executor (P4) or test-engineer back to fix/revise → repeat until clean → stop at Gate G2 (UAT signed off by the business)"
     artifacts: [Test Results, UAT Sign-off, Pentest Report, Perf Report]
     exit_gate: G2
     next: 6
@@ -81,6 +83,7 @@ phases:
     command: /chapter-forge:sdlc-release
     agents: [release-manager, compliance-checker]
     ai_autonomy: L2
+    loop: "release-manager drafts Change Request/Release Notes/Rollback Plan → compliance-checker cross-checks + verifies SoD → any gap sends release-manager back to revise → repeat until clean → stop at Gate G3 (CAB)"
     artifacts: [Change Request, Release Notes, Rollback Plan, CAB Approval]
     exit_gate: G3
     next: 7
@@ -92,6 +95,7 @@ phases:
     agents: [release-manager]
     ai_autonomy: L2         # digital cloud
     ai_autonomy_core: L1    # core on-prem: assist only, no automation
+    loop: "runbook + smoke/health prep → execute (human executes on core on-prem via PAM) → go-live verification → if smoke/health fails, recommend rollback (human-executed) instead of patching prod live, then re-verify"
     artifacts: [Deployment Runbook, Deploy Logs, Artifact Signature, Smoke Test]
     exit_gate: GO_LIVE
     next: 8
@@ -102,6 +106,7 @@ phases:
     command: /chapter-forge:sdlc-operate
     agents: [rca-agent, security-reviewer, doc-agent]
     ai_autonomy: L2
+    loop: "rca-agent builds timeline/hypotheses, security-reviewer + doc-agent in parallel → any disputed hypothesis/new evidence sends rca-agent back to revise → repeat until consistent → PIR approved by a human on-call"
     artifacts: [Runbooks, Incident/PIR, Audit Logs, SLO Dashboard]
     exit_gate: null
     feedback_to: 1   # improvement loop

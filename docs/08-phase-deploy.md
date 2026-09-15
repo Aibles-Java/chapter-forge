@@ -21,7 +21,8 @@ Get the release live — with the autonomy level matched to the blast radius of 
    - **Digital services (cloud)** — L2: AI can describe and verify canary/blue-green steps.
    - **Core banking (on-prem)** — **L1 only**: AI assists with preparation; a **human executes** during the deployment window, via PAM.
 4. After go-live: run the smoke test, check health, confirm rollback is within reach, confirm monitoring is enabled.
-5. Update state (`current_phase: deploy`, `pending_gate: GO_LIVE`).
+5. **Rollback loop:** if the smoke test or health check fails, recommend rollback immediately (executed by a human via PAM) instead of patching prod live; re-run go-live verification after rollback.
+6. Update state (`current_phase: deploy`, `pending_gate: GO_LIVE`).
 
 ## Guardrails active in this phase
 
