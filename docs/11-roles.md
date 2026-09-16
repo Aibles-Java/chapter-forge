@@ -136,4 +136,5 @@ Every role below maps to gate approvals defined in `graph/sdlc-graph.yaml`. "Com
 |---|---|
 | `doc-agent` (haiku) | Cross-cutting: keeps ADRs/API specs/runbooks/README in sync with code, flags doc rot. Invoke it whenever docs feel stale — it never touches code logic. |
 | `/chapter-forge:sdlc-status` | Works from any role — tells you the current phase, missing artifacts, pending gate, and the next command to run. |
-| `chapter-context` MCP tools | `list_services`, `get_service`, `search_project`, `search_knowledge_base`, `get_playbook` are useful regardless of role for polyrepo context. |
+| `/chapter-forge:sdlc-remember` | Distill the repo's episodic gate-log into semantic decisions/facts and procedural playbooks — run after a gate passes. See [12-memory.md](./12-memory.md). |
+| `chapter-context` MCP tools | `list_services`, `get_service`, `search_project`, `search_knowledge_base`, `get_playbook`, `get_project_memory`, `search_project_memory` are useful regardless of role for polyrepo context. |

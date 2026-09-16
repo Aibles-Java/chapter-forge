@@ -13,9 +13,9 @@ Run phase **P1 — Discovery & Requirements** for: **$ARGUMENTS**
 3. Delegate to `compliance-checker`: confirm the data classification, state the relevant SBV/PCI/ISO obligations, flag anything Group 1 under- or over-classified.
 
 ### Group 3 — Convergence loop
-4. **Loop:** if `compliance-checker` disagrees with the classification or flags a missing obligation, send `requirements-analyst` back to Group 1 to revise the PRD/classification. Repeat until compliance confirms the classification and scope.
+4. **Loop:** if `compliance-checker` disagrees with the classification or flags a missing obligation, send `requirements-analyst` back to Group 1 to revise the PRD/classification. Repeat until compliance confirms the classification and scope. Append a `loop_iteration` line to `.chapter-forge/memory/episodic/gate-log.jsonl` for each disagreement raised and each revision that resolves it (schema: `docs/12-memory.md`).
 5. Consolidate artifacts: PRD, Data Classification, preliminary Risk Register, Compliance Scope.
 6. Write/update `.chapter-forge/sdlc-state.json` (current_phase: discover, pending_gate: G0).
-7. Run the Gate G0 check (read the criteria from the graph) and present the pass/not-yet checklist.
+7. Run the Gate G0 check (read the criteria from the graph) and present the pass/not-yet checklist. Append a `gate_pass`/`gate_fail` line for G0 to `gate-log.jsonl`.
 
 **Stop:** Gate G0 is approved by **Product Owner + Risk/Compliance**. Do not mark the gate as passed on your own.

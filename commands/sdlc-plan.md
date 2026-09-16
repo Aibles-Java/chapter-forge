@@ -20,7 +20,7 @@ Run phase **P3 — Planning & Backlog** for: **$ARGUMENTS**
 
 ### Group 5 — Convergence loop
 6. Check every story against the **Definition of Ready** (`dor_criteria` in `graph/sdlc-graph.yaml`): clear requirements, data classified, security impact assessed, estimated, deterministic test approach.
-7. **Loop:** any story that fails DoR sends `requirements-analyst` (if the gap is requirements-side) or `test-engineer` (if the gap is test-approach-side) back to Group 2/3 to revise. Repeat until every story meets DoR or is explicitly deferred out of the sprint with a stated reason.
+7. **Loop:** any story that fails DoR sends `requirements-analyst` (if the gap is requirements-side) or `test-engineer` (if the gap is test-approach-side) back to Group 2/3 to revise. Repeat until every story meets DoR or is explicitly deferred out of the sprint with a stated reason. Append a `loop_iteration` line (no `gate`, this phase has no hard gate) to `.chapter-forge/memory/episodic/gate-log.jsonl` for each DoR failure raised and each revision that resolves it.
 8. Update state (current_phase: plan) and record which stories are sprint-ready vs. deferred.
 
 **Stop:** there is no hard human gate at P3, but only stories that meet the DoR checklist should enter the sprint — treat the loop in Group 5 as the enforcement mechanism, not a one-time check.

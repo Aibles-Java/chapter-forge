@@ -62,6 +62,8 @@ Example configuration in an MCP client:
 | `get_playbook(topic?)` | List docs in Onward-playbook/content, or read the best-matching one by topic keyword. |
 | `get_sdlc_graph` | Return the content of `graph/sdlc-graph.yaml`. |
 | `get_sdlc_state(repo?)` | Read `.chapter-forge/sdlc-state.json` (for a given repo or across the whole workspace) → phase/gate. |
+| `get_project_memory(repo?, type?)` | Read a repo's `.chapter-forge/memory/` — defaults to `semantic` (MEMORY.md index + domain facts + decisions), or `episodic`/`procedural`. See `docs/12-memory.md`. |
+| `search_project_memory(query, repo?, type?)` | Search `memory/semantic` + `memory/procedural` across every repo by default; pass `type: "episodic"` to search the raw event log instead. |
 
 ## Security
 

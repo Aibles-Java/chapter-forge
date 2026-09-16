@@ -9,5 +9,6 @@ Check Gate: **$1**
 2. Delegate to `compliance-checker`: cross-check each criterion against the artifact/current state, mark it **met / not met / missing evidence**, with concrete evidence (file, PR, report).
 3. Print the checklist table + the list of gaps to address.
 4. Print clearly **who the approver** of this gate is.
+5. Append a `gate_pass` (all criteria met) or `gate_fail` (any gap) line for `$1` to `.chapter-forge/memory/episodic/gate-log.jsonl` (schema: `docs/12-memory.md`) — this is evidence-gathering, not the approval itself.
 
 **Important:** this command does NOT approve the gate. It only prepares evidence for a **human** to make the decision (principle: AI is a Maker, not a Checker).

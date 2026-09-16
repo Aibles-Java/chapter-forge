@@ -24,6 +24,7 @@ P1 Discover ──G0──▶ P2 Design ──G1──▶ P3 Plan ──▶ P4 D
 Cross-cutting, usable at any point:
 - `/chapter-forge:sdlc-status` — where a feature currently is, what's missing, next command.
 - `/chapter-forge:sdlc-gate <G0\|G1\|CI\|G2\|G3\|GO_LIVE>` — check a gate's exit criteria against current evidence.
+- `/chapter-forge:sdlc-remember` — distill the episodic event log into semantic facts/decisions and procedural playbooks (see [12-memory.md](./12-memory.md)).
 
 The graph (`graph/sdlc-graph.yaml`) is the **single source of truth** for phases, agents, artifacts, and gate criteria. Commands and the MCP's `get_sdlc_graph` tool both read from it — if you want to change the process, edit the graph first.
 
@@ -93,6 +94,8 @@ The plugin ships an MCP server for polyrepo-wide context (see `mcp/chapter-conte
 | `get_playbook` | Fetch a specific playbook document |
 | `get_sdlc_graph` | Return the parsed `sdlc-graph.yaml` — phases, agents, artifacts, gates |
 | `get_sdlc_state` | Read a feature's `.chapter-forge/sdlc-state.json` |
+| `get_project_memory` | Read a repo's episodic/semantic/procedural memory (see [12-memory.md](./12-memory.md)) |
+| `search_project_memory` | Search semantic/procedural memory across every repo in the workspace |
 
 Set `CHAPTER_WORKSPACE` to the parent directory containing all service repos (see main `README.md` §2).
 

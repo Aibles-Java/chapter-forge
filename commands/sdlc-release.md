@@ -15,8 +15,8 @@ Run phase **P6 — Release & Change Management** for: **$ARGUMENTS**
 3. Delegate to `compliance-checker`: cross-check the changes against compliance obligations, verify SoD (deployer ≠ developer).
 
 ### Group 4 — Convergence loop
-4. **Loop:** any compliance gap or SoD violation found in Group 3 sends `release-manager` back to Group 2 to revise the Change Request/Rollback Plan. Repeat until `compliance-checker` confirms no open gaps.
+4. **Loop:** any compliance gap or SoD violation found in Group 3 sends `release-manager` back to Group 2 to revise the Change Request/Rollback Plan. Repeat until `compliance-checker` confirms no open gaps. Append a `loop_iteration` line to `.chapter-forge/memory/episodic/gate-log.jsonl` for each gap raised and each revision that resolves it (schema: `docs/12-memory.md`).
 5. Update state (current_phase: release, pending_gate: G3).
-6. Run the Gate G3 check and present the dossier to the CAB.
+6. Run the Gate G3 check and present the dossier to the CAB. Append a `gate_pass`/`gate_fail` line for G3 to `gate-log.jsonl`.
 
 **Stop:** Gate G3 is approved by **CAB + Release Manager + Risk/Compliance**. AI does not approve the CAB on its own.

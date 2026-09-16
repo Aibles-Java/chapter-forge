@@ -107,6 +107,23 @@ function findSdlcStateFiles(repo?: string): string[] {
   return results;
 }
 
+/** Find repos (abs path + name) that have a .chapter-forge/memory directory. */
+function findMemoryRepos(repo?: string): { name: string; abs: string; memoryDir: string }[] {
+  const candidates = repo
+    ? [{ name: repo, abs: join(WORKSPACE, repo) }]
+    : safeReadDir(WORKSPACE)
+        .filter((e) => e.isDir && !e.name.startsWith("."))
+        .map((e) => ({ name: e.name, abs: join(WORKSPACE, e.name) }));
+  return candidates
+    .map((c) => ({ ...c, memoryDir: join(c.abs, ".chapter-forge", "memory") }))
+    .filter((c) => existsSync(c.memoryDir));
+}
+
+/** Last N non-empty lines of a text file (used for the episodic log, which can grow large). */
+function lastLines(content: string, n: number): string[] {
+  return content.split(/\r?\n/).filter((l) => l.trim().length > 0).slice(-n);
+}
+
 // ── Helpers to format the parsed SDLC graph ─────────────────────────────────────
 function asArr(v: unknown): unknown[] {
   return Array.isArray(v) ? v : [];
@@ -447,6 +464,134 @@ server.registerTool(
       blocks.push(`## ${relPath(WORKSPACE, file)}\n${summary}`);
     }
     return textResult(blocks.join("\n\n"));
+  },
+);
+
+// 8. get_project_memory ─────────────────────────────────────────────────────────
+server.registerTool(
+  "get_project_memory",
+  {
+    title: "Get a repo's project memory (episodic/semantic/procedural)",
+    description:
+      "Read .chapter-forge/memory for a repo (or all repos if omitted). Defaults to 'semantic' " +
+      "(MEMORY.md index + domain-facts.md + decision titles) — the cheapest to read. " +
+      "'procedural' lists playbooks with their seen_count/promote_candidate. " +
+      "'episodic' returns the last lines of gate-log.jsonl (raw event log — noisier, use sparingly). " +
+      "See docs/12-memory.md for the schema.",
+    inputSchema: {
+      repo: z
+        .string()
+        .optional()
+        .describe("Repo name; leave empty to scan every repo with a memory/ dir"),
+      type: z
+        .enum(["episodic", "semantic", "procedural"])
+        .optional()
+        .describe("Defaults to 'semantic'"),
+    },
+  },
+  async ({ repo, type }) => {
+    const kind = type ?? "semantic";
+    const repos = findMemoryRepos(repo);
+    if (repos.length === 0) {
+      return textResult(
+        repo
+          ? `No .chapter-forge/memory found in repo "${repo}".`
+          : "No .chapter-forge/memory found in any repo in the workspace.",
+      );
+    }
+
+    const blocks: string[] = [];
+    for (const r of repos) {
+      if (kind === "episodic") {
+        const logPath = join(r.memoryDir, "episodic", "gate-log.jsonl");
+        const raw = safeReadFile(logPath);
+        if (raw === null) {
+          blocks.push(`## ${r.name}\n(no episodic/gate-log.jsonl)`);
+          continue;
+        }
+        const tail = lastLines(raw, 50);
+        blocks.push(
+          `## ${r.name} — last ${tail.length} episodic entries\n${tail.join("\n")}`,
+        );
+      } else if (kind === "procedural") {
+        const dir = join(r.memoryDir, "procedural", "playbooks");
+        const files = safeReadDir(dir).filter((e) => !e.isDir && e.name.endsWith(".md"));
+        if (files.length === 0) {
+          blocks.push(`## ${r.name}\n(no procedural playbooks)`);
+          continue;
+        }
+        const lines = files.map((f) => `- ${relPath(WORKSPACE, join(dir, f.name))}`);
+        blocks.push(`## ${r.name} — playbooks (${files.length})\n${lines.join("\n")}`);
+      } else {
+        const semDir = join(r.memoryDir, "semantic");
+        const index = safeReadFile(join(semDir, "MEMORY.md"));
+        const facts = safeReadFile(join(semDir, "domain-facts.md"));
+        const decisionsDir = join(semDir, "decisions");
+        const decisions = safeReadDir(decisionsDir).filter(
+          (e) => !e.isDir && e.name.endsWith(".md"),
+        );
+        const parts = [
+          index ? `### MEMORY.md\n${index}` : "### MEMORY.md\n(none)",
+          facts ? `### domain-facts.md\n${facts}` : "### domain-facts.md\n(none)",
+          decisions.length
+            ? `### decisions (${decisions.length})\n` +
+              decisions.map((d) => `- ${relPath(WORKSPACE, join(decisionsDir, d.name))}`).join("\n")
+            : "### decisions\n(none)",
+        ];
+        blocks.push(`## ${r.name}\n${parts.join("\n\n")}`);
+      }
+    }
+    return textResult(blocks.join("\n\n---\n\n"));
+  },
+);
+
+// 9. search_project_memory ──────────────────────────────────────────────────────
+server.registerTool(
+  "search_project_memory",
+  {
+    title: "Search project memory across repos",
+    description:
+      "Search text in every repo's .chapter-forge/memory/semantic + memory/procedural (default) — " +
+      "distilled, curated memory, safe to search broadly across the polyrepo. " +
+      "Pass type='episodic' to search the raw gate-log.jsonl instead (noisier, use only when you need the event history).",
+    inputSchema: {
+      query: z.string().describe("String to search for"),
+      repo: z.string().optional().describe("Limit the search to one repo; leave empty to search all"),
+      type: z
+        .enum(["episodic", "semantic-and-procedural"])
+        .optional()
+        .describe("Defaults to 'semantic-and-procedural'"),
+    },
+  },
+  async ({ query, repo, type }) => {
+    const repos = findMemoryRepos(repo);
+    if (repos.length === 0) {
+      return textResult(
+        repo
+          ? `No .chapter-forge/memory found in repo "${repo}".`
+          : "No .chapter-forge/memory found in any repo in the workspace.",
+      );
+    }
+    const roots =
+      type === "episodic"
+        ? repos.map((r) => join(r.memoryDir, "episodic"))
+        : repos.flatMap((r) => [
+            join(r.memoryDir, "semantic"),
+            join(r.memoryDir, "procedural"),
+          ]);
+    const existingRoots = roots.filter((p) => existsSync(p));
+    if (existingRoots.length === 0) {
+      return textResult("No matching memory directories found for that repo/type.");
+    }
+
+    const { hits, engine } = searchText(WORKSPACE, existingRoots, query, 30);
+    if (hits.length === 0) {
+      return textResult(`"${query}" not found in project memory. (engine: ${engine})`);
+    }
+    const lines = hits.map((h) => `- [${h.file}:${h.line}] ${h.text}`);
+    return textResult(
+      `Project memory results for "${query}" (${hits.length}):\n${lines.join("\n")}`,
+    );
   },
 );
 

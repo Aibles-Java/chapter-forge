@@ -16,6 +16,7 @@ Full usage guide for the plugin, organized so any team member can find "what do 
   - [09-phase-operate.md](./09-phase-operate.md) — P8 Operations & Monitoring
 - [10-guardrails.md](./10-guardrails.md) — every hook, what it blocks, how to test it
 - [11-roles.md](./11-roles.md) — use cases by role: what each role runs, approves, and reviews
+- [12-memory.md](./12-memory.md) — episodic/semantic/procedural project memory: schema, write/read path, `sdlc-remember`
 - [settings.sample.json](./settings.sample.json) — optional project-level permission overlay
 
 ## Where to start
