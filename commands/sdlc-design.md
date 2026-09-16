@@ -19,9 +19,9 @@ Run phase **P2 — Design & Architecture** for: **$ARGUMENTS**
 7. Delegate to `security-reviewer`: review the same artifacts against OWASP/PCI.
 
 ### Group 4 — Convergence & sign-off prep
-8. **Loop:** any CRITICAL/HIGH finding from `threat-modeler` or `security-reviewer` sends `solution-architect` back to revise the affected artifact (Group 2) — do not just log it as a future to-do. Repeat Groups 2–3 until no unresolved CRITICAL/HIGH remains.
+8. **Loop:** any CRITICAL/HIGH finding from `threat-modeler` or `security-reviewer` sends `solution-architect` back to revise the affected artifact (Group 2) — do not just log it as a future to-do. Repeat Groups 2–3 until no unresolved CRITICAL/HIGH remains. Append a `loop_iteration` line to `.chapter-forge/memory/episodic/gate-log.jsonl` for each finding raised and each revision that resolves it (schema: `docs/12-memory.md`).
 9. **Design walkthrough:** `solution-architect` produces a short walkthrough note listing every finding raised and its resolution (fixed / accepted with rationale) — this is the self-check before asking a human to sign off.
 10. Consolidate artifacts, update state (current_phase: design, pending_gate: G1).
-11. Run the Gate G1 check and present the checklist.
+11. Run the Gate G1 check and present the checklist. Append a `gate_pass`/`gate_fail` line for G1 to `gate-log.jsonl`.
 
 **Stop:** Gate G1 is signed off by **Architect + Security**. AI only prepares evidence (diagrams, threat model, ADR, walkthrough notes) and never marks a finding as resolved without an artifact change or an explicit accepted-risk rationale.

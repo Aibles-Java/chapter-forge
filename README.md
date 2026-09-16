@@ -52,8 +52,9 @@ Start a feature and follow the pipeline:
 | `/chapter-forge:sdlc-deploy` | 7 → GO_LIVE | Smoke test, health check |
 | `/chapter-forge:sdlc-operate` | 8 | Observability, RCA, PIR |
 | `/chapter-forge:sdlc-gate G2` | gate | Check the exit criteria of a gate |
+| `/chapter-forge:sdlc-remember` | — | Distill episodic memory into semantic decisions/facts and procedural playbooks |
 
-Get project context quickly (via the `chapter-context` MCP): `list_services`, `get_service`, `search_project`, `search_knowledge_base`, `get_playbook`, `get_sdlc_graph`, `get_sdlc_state`.
+Get project context quickly (via the `chapter-context` MCP): `list_services`, `get_service`, `search_project`, `search_knowledge_base`, `get_playbook`, `get_sdlc_graph`, `get_sdlc_state`, `get_project_memory`, `search_project_memory`.
 
 For the full per-phase workflow (agents, guardrails, artifacts, exit criteria) and per-role use cases ("I'm a Product Owner/Architect/Developer/QA/..., what do I run?"), see [docs/README.md](./docs/README.md).
 
@@ -82,7 +83,7 @@ skills/           reference skills (overview, compliance, gate-criteria, threat-
 hooks/            hooks.json + guardrail scripts
 graph/            sdlc-graph.yaml — the pipeline source of truth
 mcp/chapter-context/  TypeScript MCP tapping into polyrepo context
-docs/             full usage guide — overview, per-phase workflow, guardrail reference, per-role use cases
+docs/             full usage guide — overview, per-phase workflow, guardrail reference, per-role use cases, project memory reference
 ```
 
 ## 7. Maintenance

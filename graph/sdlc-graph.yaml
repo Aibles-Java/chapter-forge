@@ -3,6 +3,9 @@
 # Read by: sdlc-status command (where are we), sdlc-gate (check exit criteria),
 #          MCP chapter-context (get_sdlc_state).
 # Each feature keeps its state in .chapter-forge/sdlc-state.json inside the respective repo.
+# Each repo also keeps episodic/semantic/procedural project memory under
+# .chapter-forge/memory/ — see docs/12-memory.md. Not part of this graph (it's evidence/
+# learning, not process/gate structure), but every phase below writes to it.
 # ─────────────────────────────────────────────────────────────────────────────
 version: "0.1.0"
 

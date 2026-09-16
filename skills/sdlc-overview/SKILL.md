@@ -20,7 +20,7 @@ The harness packages the chapter's banking SDLC into Claude Code tooling. Core p
 | 7 | Deployment | `/sdlc-deploy` | release-manager | GO_LIVE |
 | 8 | Operations | `/sdlc-operate` | rca-agent, doc-agent | (feedback) |
 
-Utilities: `/sdlc-status` (where you are) · `/sdlc-gate <G>` (check gate criteria).
+Utilities: `/sdlc-status` (where you are) · `/sdlc-gate <G>` (check gate criteria) · `/sdlc-remember` (distill episodic memory into semantic/procedural — see `docs/12-memory.md`).
 (Full namespace once installed as a plugin: `/chapter-forge:<command>`.)
 
 ## Starting a feature
@@ -38,4 +38,4 @@ Each feature keeps its state in `<repo>/.chapter-forge/sdlc-state.json`.
 Block reading/writing secret·PII, block destructive/prod-touching commands. See the `compliance-checklist` and `gate-criteria` skills.
 
 ## Project-wide context
-Ask naturally → Claude uses the `chapter-context` MCP: `search_project`, `list_services`, `get_service`, `search_knowledge_base`, `get_playbook`, `get_sdlc_state`.
+Ask naturally → Claude uses the `chapter-context` MCP: `search_project`, `list_services`, `get_service`, `search_knowledge_base`, `get_playbook`, `get_sdlc_state`, `get_project_memory`, `search_project_memory`.

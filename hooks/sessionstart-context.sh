@@ -21,4 +21,11 @@ if [ -f "$state_file" ] && command -v jq >/dev/null 2>&1; then
   [ -n "$phase" ] && echo "- Current feature: phase '$phase'${gate:+, waiting on gate $gate}."
 fi
 
+# If this repo has distilled project memory, print a short index (see docs/12-memory.md).
+memory_index=".chapter-forge/memory/semantic/MEMORY.md"
+if [ -f "$memory_index" ]; then
+  echo "- Project memory (semantic index):"
+  head -5 "$memory_index"
+fi
+
 exit 0

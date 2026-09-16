@@ -15,8 +15,8 @@ Run phase **P7 — Deployment** for: **$ARGUMENTS**
    - **Core banking (on-prem)** — level **L1**: only assist with preparation; **humans execute** during the window, via PAM.
 
 ### Group 3 — Go-live verification & rollback loop
-4. After go-live: run the smoke test, check health, confirm rollback is within reach, and that monitoring is enabled.
-5. **Loop:** if the smoke test or health check fails, do not proceed — recommend the rollback path immediately (a human executes it via PAM) and re-run the go-live verification once rolled back. Never patch prod live to force a green smoke test.
+4. After go-live: run the smoke test, check health, confirm rollback is within reach, and that monitoring is enabled. Append a `gate_pass`/`gate_fail` line for `GO_LIVE` to `.chapter-forge/memory/episodic/gate-log.jsonl`.
+5. **Loop:** if the smoke test or health check fails, do not proceed — recommend the rollback path immediately (a human executes it via PAM) and re-run the go-live verification once rolled back. Never patch prod live to force a green smoke test. Append a `loop_iteration` line to `gate-log.jsonl` for the failure and, once rolled back and re-verified, a follow-up line resolving it (schema: `docs/12-memory.md`).
 6. Update state (current_phase: deploy, pending_gate: GO_LIVE).
 
 **Guardrail:** deploy commands that touch prod (kubectl/helm/terraform prod) are blocked — they must be run by a human. AI does not deploy on its own.

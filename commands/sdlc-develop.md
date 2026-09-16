@@ -15,11 +15,11 @@ Run phase **P4 — Development** for: **$ARGUMENTS**
 
 ### Group 3 — Independent review & convergence
 5. When the code is ready, delegate **independently**: `code-reviewer` and `security-reviewer` (reviewer ≠ author — keep SoD).
-6. **Loop:** any CRITICAL/HIGH finding sends `dev-executor` back to Group 2 to fix — do not just log it as a to-do. Repeat Groups 2–3 until no unresolved CRITICAL/HIGH remains.
+6. **Loop:** any CRITICAL/HIGH finding sends `dev-executor` back to Group 2 to fix — do not just log it as a to-do. Repeat Groups 2–3 until no unresolved CRITICAL/HIGH remains. Append a `loop_iteration` line to `.chapter-forge/memory/episodic/gate-log.jsonl` for each finding raised and each fix that resolves it (schema: `docs/12-memory.md`).
 7. `dev-executor` writes a short **review summary** (finding → fix, with file:line) for the audit trail — every finding must map to a code change, not a verbal "will fix later."
 
 ### Group 4 — CI gate prep
-8. Run the **CI gate** checklist: PR approved by someone else (reviewer ≠ author/AI), CI green, coverage ≥ 80%, 0 SAST/SCA findings at Critical/High, 0 leaked secrets.
+8. Run the **CI gate** checklist: PR approved by someone else (reviewer ≠ author/AI), CI green, coverage ≥ 80%, 0 SAST/SCA findings at Critical/High, 0 leaked secrets. Append a `gate_pass`/`gate_fail` line for `CI` to `gate-log.jsonl`.
 9. Update state (current_phase: develop, pending_gate: CI).
 
 **Stop at the PR.** Do not self-merge, do not deploy. The guardrail will block commands that touch prod.
