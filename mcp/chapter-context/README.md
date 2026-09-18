@@ -8,11 +8,16 @@ full-workspace text search, knowledge base lookups, the SDLC graph, and per-feat
 
 ## Installation
 
+`dist/index.js` is a self-contained bundle (SDK and zod included) committed to the repo, so
+running it needs only Node.js ≥ 18 — no `npm install`. To rebuild after changing `src/`:
+
 ```bash
 cd mcp/chapter-context
 npm install
-npm run build      # compile TypeScript into dist/
+npm run build      # typecheck (tsc --noEmit) + bundle with esbuild into dist/index.js
 ```
+
+Commit the regenerated `dist/index.js` together with the source change.
 
 Run the server:
 
@@ -31,6 +36,9 @@ Order for determining the workspace root:
 1. If the `CHAPTER_WORKSPACE` env is set and exists → use it directly.
 2. Otherwise walk **up** from `process.cwd()` until a directory containing ≥2 known repos is found.
 3. Fallback: `process.cwd()`.
+
+In the plugin manifest the variable is passed as `${CHAPTER_WORKSPACE:-}`, so leaving it unset is
+valid and falls through to step 2.
 
 `CLAUDE_PLUGIN_ROOT` (optional) points at the plugin root directory (containing `graph/`) so the
 `get_sdlc_graph` tool can find the graph file faster.

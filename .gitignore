@@ -1,6 +1,8 @@
 # Node / MCP
 node_modules/
 dist/
+# The MCP server ships prebuilt (bundled) so installs work without npm.
+!mcp/chapter-context/dist/
 *.log
 
 # Local SDLC state (per-feature, not committed to the plugin repo)
