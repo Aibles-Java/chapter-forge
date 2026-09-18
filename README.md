@@ -12,7 +12,7 @@ A Claude Code harness that turns the **standard SDLC of the banking product** in
 
 - **Claude Code** (the **Team/Enterprise** edition is recommended for a banking environment — admin, audit, no-training-by-default on data).
 - **`jq`** — for the guardrail hooks (`brew install jq`).
-- **Node.js ≥ 18** — for the `chapter-context` MCP.
+- **Node.js ≥ 22.18** — for the `chapter-context` MCP (runs TypeScript directly via native type stripping).
 - **ripgrep (`rg`)** — optional, speeds up `search_project` (there is a fallback if missing).
 
 ## 2. Installation (marketplace → plugin)
@@ -25,7 +25,7 @@ A Claude Code harness that turns the **standard SDLC of the banking product** in
 /plugin install chapter-forge@chapter-tools
 ```
 
-The `chapter-context` MCP ships prebuilt (`mcp/chapter-context/dist/index.js`), so there is no build step. Each Claude Code session starts its own MCP process.
+The `chapter-context` MCP needs no build step: Claude Code installs its runtime dependencies from the plugin-root `package-lock.json` during install/update, and Node runs the TypeScript source directly. Each Claude Code session starts its own MCP process. If Node is too old or the dependencies are missing, the SessionStart hook prints a warning.
 
 **Workspace (`CHAPTER_WORKSPACE`)** — the parent directory containing the service repos. It is optional and is read when `claude` starts, so set it *before* launching:
 
@@ -89,4 +89,4 @@ docs/             full usage guide — overview, per-phase workflow, guardrail r
 
 - Change the process/gates → update `graph/sdlc-graph.yaml` (commands & MCP read from here).
 - Change guardrails → `hooks/*.sh` (test by piping a sample JSON into the script, expect `exit 2` when it blocks).
-- Update the MCP → edit `mcp/chapter-context/src`, run `npm install && npm run build`, and **commit the regenerated `dist/index.js`** (the plugin runs the bundle directly).
+- Update the MCP → edit `mcp/chapter-context/src`, then `npm run typecheck` in `mcp/chapter-context` (no build; see its README). Runtime deps go in the root `package.json`, dev tooling in `mcp/chapter-context/package.json`.

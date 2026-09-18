@@ -3,25 +3,13 @@
   "version": "0.1.0",
   "description": "MCP server providing project-wide (polyrepo) context for the chapter team",
   "type": "module",
-  "bin": {
-    "chapter-context-mcp": "dist/index.js"
-  },
-  "files": [
-    "dist"
-  ],
   "scripts": {
-    "typecheck": "tsc --noEmit",
-    "bundle": "esbuild src/index.ts --bundle --platform=node --target=node18 --format=esm --outfile=dist/index.js --banner:js=\"import { createRequire } from 'node:module'; const require = createRequire(import.meta.url);\"",
-    "build": "npm run typecheck && npm run bundle",
-    "start": "node dist/index.js"
-  },
-  "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.19.1",
-    "zod": "^3.25.76"
+    "typecheck": "tsc",
+    "start": "node src/index.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
-    "esbuild": "^0.25.12",
-    "typescript": "^5.7.0"
-  }
+    "typescript": "^5.8.0"
+  },
+  "private": true
 }

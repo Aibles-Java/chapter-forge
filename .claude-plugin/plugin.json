@@ -9,7 +9,7 @@
   "mcpServers": {
     "chapter-context": {
       "command": "node",
-      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/chapter-context/dist/index.js"],
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/chapter-context/src/index.ts"],
       "env": {
         "CHAPTER_WORKSPACE": "${CHAPTER_WORKSPACE:-}"
       }

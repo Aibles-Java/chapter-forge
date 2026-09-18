@@ -1,2 +1,2 @@
 node_modules/
-# dist/ is committed: the plugin runs the prebuilt bundle directly (see README).
+dist/

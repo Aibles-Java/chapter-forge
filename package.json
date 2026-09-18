@@ -1,0 +1,12 @@
+{
+  "name": "chapter-forge",
+  "private": true,
+  "description": "Runtime dependencies for the chapter-context MCP server. Claude Code installs these automatically (from package-lock.json) when the plugin is installed or updated; keep dev tooling out of here.",
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "zod": "3.25.76"
+  }
+}

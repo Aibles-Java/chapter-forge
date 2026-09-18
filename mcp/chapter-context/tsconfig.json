@@ -3,15 +3,18 @@
     "target": "ES2022",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "outDir": "dist",
     "rootDir": "src",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "declaration": false,
-    "sourceMap": false
+    // Node runs src/*.ts directly (native type stripping), so tsc only type-checks.
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    // Reject syntax Node cannot strip (enums, namespaces, parameter properties, ...)
+    // and require `import type` for type-only imports.
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*.ts"]
 }

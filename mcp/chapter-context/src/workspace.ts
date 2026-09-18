@@ -5,10 +5,10 @@
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { readdirSync } from "node:fs";
 import { basename, dirname, extname, join, relative, resolve } from "node:path";
-import { isExcludedDir, isSensitiveFile, truncate } from "./security.js";
+import { isExcludedDir, isSensitiveFile, truncate } from "./security.ts";
 
 // Re-export so other modules (search.ts) share a single source.
-export { isSensitiveFile } from "./security.js";
+export { isSensitiveFile } from "./security.ts";
 
 /** "Known" directories used to identify the workspace root. */
 export const KNOWN_DIRS = [

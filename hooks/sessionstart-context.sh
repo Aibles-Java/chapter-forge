@@ -13,6 +13,20 @@ cat <<'EOF'
 - Project context: use the chapter-context MCP (search_project, list_services, search_knowledge_base...).
 EOF
 
+# chapter-context MCP prerequisites — warn only when something is wrong (keep output short).
+# The MCP runs src/*.ts directly, so it needs Node >= 22.18 (native type stripping) and the
+# runtime deps Claude Code installs from the plugin-root package-lock.json.
+if ! command -v node >/dev/null 2>&1; then
+  echo "- ⚠ chapter-context MCP unavailable: Node.js not found (need >= 22.18)."
+else
+  node_ver="$(node -p 'process.versions.node' 2>/dev/null)"
+  if ! node -e 'const [a,b]=process.versions.node.split(".").map(Number);process.exit(a>22||(a===22&&b>=18)?0:1)' 2>/dev/null; then
+    echo "- ⚠ chapter-context MCP unavailable: Node ${node_ver:-?} is too old (need >= 22.18)."
+  elif [ -n "${CLAUDE_PLUGIN_ROOT:-}" ] && [ ! -d "${CLAUDE_PLUGIN_ROOT}/node_modules/@modelcontextprotocol/sdk" ]; then
+    echo "- ⚠ chapter-context MCP dependencies missing (plugin install could not reach npm?). Reinstall the plugin via /plugin."
+  fi
+fi
+
 # If a state file for the current feature exists, print the running phase.
 state_file=".chapter-forge/sdlc-state.json"
 if [ -f "$state_file" ] && command -v jq >/dev/null 2>&1; then

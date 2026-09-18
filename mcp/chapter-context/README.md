@@ -8,21 +8,31 @@ full-workspace text search, knowledge base lookups, the SDLC graph, and per-feat
 
 ## Installation
 
-`dist/index.js` is a self-contained bundle (SDK and zod included) committed to the repo, so
-running it needs only Node.js ≥ 18 — no `npm install`. To rebuild after changing `src/`:
+There is **no build step**. Node.js ≥ 22.18 runs `src/index.ts` directly (native type stripping),
+and nothing compiled is committed.
+
+- **Runtime dependencies** (`@modelcontextprotocol/sdk`, `zod`) live in the **plugin-root**
+  `package.json` / `package-lock.json`. Claude Code installs them automatically when the plugin is
+  installed or updated (`--ignore-scripts`). Keep dev tooling out of that file — everything in it,
+  devDependencies included, is installed on every user's machine.
+- **Dev tooling** (`typescript`, `@types/node`) lives here, in `mcp/chapter-context/package.json`.
+
+Local development:
 
 ```bash
-cd mcp/chapter-context
-npm install
-npm run build      # typecheck (tsc --noEmit) + bundle with esbuild into dist/index.js
+npm install                                  # at the plugin root: runtime deps
+cd mcp/chapter-context && npm install        # dev tooling
+npm run typecheck                            # tsc --noEmit
 ```
 
-Commit the regenerated `dist/index.js` together with the source change.
+`tsconfig.json` enables `erasableSyntaxOnly` and `verbatimModuleSyntax`, so `tsc` rejects anything
+Node cannot strip (enums, namespaces, parameter properties, type-only imports without `import type`).
+Relative imports use the `.ts` extension.
 
 Run the server:
 
 ```bash
-node dist/index.js
+node src/index.ts
 ```
 
 ## Workspace configuration (`CHAPTER_WORKSPACE`)
@@ -50,7 +60,7 @@ Example configuration in an MCP client:
   "mcpServers": {
     "chapter-context": {
       "command": "node",
-      "args": ["/path/to/mcp/chapter-context/dist/index.js"],
+      "args": ["/path/to/mcp/chapter-context/src/index.ts"],
       "env": {
         "CHAPTER_WORKSPACE": "/Users/you/Workspace/chapter-java"
       }
