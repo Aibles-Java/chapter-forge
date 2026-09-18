@@ -5,10 +5,10 @@
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { readdirSync } from "node:fs";
 import { basename, dirname, extname, join, relative, resolve } from "node:path";
-import { isExcludedDir, isSensitiveFile, truncate } from "./security.js";
+import { isExcludedDir, isSensitiveFile, truncate } from "./security.ts";
 
 // Re-export so other modules (search.ts) share a single source.
-export { isSensitiveFile } from "./security.js";
+export { isSensitiveFile } from "./security.ts";
 
 /** "Known" directories used to identify the workspace root. */
 export const KNOWN_DIRS = [
@@ -71,7 +71,7 @@ function countKnownDirs(dir: string): number {
  * Return the workspace root:
  * 1. If env CHAPTER_WORKSPACE has a value and exists → use it.
  * 2. Otherwise walk UP from process.cwd(), stopping when a dir contains ≥2 known dirs.
- * 3. Fallback: /Users/leonard/Workspace/chapter-java if it exists, else process.cwd().
+ * 3. Fallback: process.cwd().
  */
 export function resolveWorkspace(): string {
   const envRoot = process.env.CHAPTER_WORKSPACE?.trim();
@@ -87,8 +87,7 @@ export function resolveWorkspace(): string {
     current = parent;
   }
 
-  const fallback = "/Users/leonard/Workspace/chapter-java";
-  return existsSync(fallback) ? fallback : process.cwd();
+  return process.cwd();
 }
 
 /** List the top-level entries of a directory, error-safe. */

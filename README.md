@@ -12,7 +12,7 @@ A Claude Code harness that turns the **standard SDLC of the banking product** in
 
 - **Claude Code** (the **Team/Enterprise** edition is recommended for a banking environment — admin, audit, no-training-by-default on data).
 - **`jq`** — for the guardrail hooks (`brew install jq`).
-- **Node.js ≥ 18** — for the `chapter-context` MCP.
+- **Node.js ≥ 22.18** — for the `chapter-context` MCP (runs TypeScript directly via native type stripping).
 - **ripgrep (`rg`)** — optional, speeds up `search_project` (there is a fallback if missing).
 
 ## 2. Installation (marketplace → plugin)
@@ -23,18 +23,17 @@ A Claude Code harness that turns the **standard SDLC of the banking product** in
 
 # 2) Install the plugin
 /plugin install chapter-forge@chapter-tools
-
-# 3) Build the MCP server (once, and each time it is updated)
-cd <plugin-path>/mcp/chapter-context && npm install && npm run build
 ```
 
-Set up the workspace for the MCP (point it at the parent directory containing the service repos):
+The `chapter-context` MCP needs no build step: Claude Code installs its runtime dependencies from the plugin-root `package-lock.json` during install/update, and Node runs the TypeScript source directly. Each Claude Code session starts its own MCP process. If Node is too old or the dependencies are missing, the SessionStart hook prints a warning.
 
-```bash
-export CHAPTER_WORKSPACE=/Users/<you>/Workspace/chapter-java
-```
+**Workspace (`CHAPTER_WORKSPACE`)** — the parent directory containing the service repos. It is optional and is read when `claude` starts, so set it *before* launching:
 
-> If not set, the MCP walks up from the current directory to find the workspace; setting the env is still the most reliable way.
+| Where | Scope |
+|---|---|
+| Not set | The MCP walks up from the directory where you started `claude` to find the workspace (start inside any service repo) |
+| `CHAPTER_WORKSPACE=/path claude` | That session only |
+| `export CHAPTER_WORKSPACE=/path` in `~/.zshrc` | Every session |
 
 ## 3. Daily use
 
@@ -90,4 +89,4 @@ docs/             full usage guide — overview, per-phase workflow, guardrail r
 
 - Change the process/gates → update `graph/sdlc-graph.yaml` (commands & MCP read from here).
 - Change guardrails → `hooks/*.sh` (test by piping a sample JSON into the script, expect `exit 2` when it blocks).
-- Update the MCP → edit `mcp/chapter-context/src`, re-run `npm run build`.
+- Update the MCP → edit `mcp/chapter-context/src`, then `npm run typecheck` in `mcp/chapter-context` (no build; see its README). Runtime deps go in the root `package.json`, dev tooling in `mcp/chapter-context/package.json`.

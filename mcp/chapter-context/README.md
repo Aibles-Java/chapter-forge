@@ -8,16 +8,31 @@ full-workspace text search, knowledge base lookups, the SDLC graph, and per-feat
 
 ## Installation
 
+There is **no build step**. Node.js ≥ 22.18 runs `src/index.ts` directly (native type stripping),
+and nothing compiled is committed.
+
+- **Runtime dependencies** (`@modelcontextprotocol/sdk`, `zod`) live in the **plugin-root**
+  `package.json` / `package-lock.json`. Claude Code installs them automatically when the plugin is
+  installed or updated (`--ignore-scripts`). Keep dev tooling out of that file — everything in it,
+  devDependencies included, is installed on every user's machine.
+- **Dev tooling** (`typescript`, `@types/node`) lives here, in `mcp/chapter-context/package.json`.
+
+Local development:
+
 ```bash
-cd mcp/chapter-context
-npm install
-npm run build      # compile TypeScript into dist/
+npm install                                  # at the plugin root: runtime deps
+cd mcp/chapter-context && npm install        # dev tooling
+npm run typecheck                            # tsc --noEmit
 ```
+
+`tsconfig.json` enables `erasableSyntaxOnly` and `verbatimModuleSyntax`, so `tsc` rejects anything
+Node cannot strip (enums, namespaces, parameter properties, type-only imports without `import type`).
+Relative imports use the `.ts` extension.
 
 Run the server:
 
 ```bash
-node dist/index.js
+node src/index.ts
 ```
 
 ## Workspace configuration (`CHAPTER_WORKSPACE`)
@@ -32,6 +47,9 @@ Order for determining the workspace root:
 2. Otherwise walk **up** from `process.cwd()` until a directory containing ≥2 known repos is found.
 3. Fallback: `process.cwd()`.
 
+In the plugin manifest the variable is passed as `${CHAPTER_WORKSPACE:-}`, so leaving it unset is
+valid and falls through to step 2.
+
 `CLAUDE_PLUGIN_ROOT` (optional) points at the plugin root directory (containing `graph/`) so the
 `get_sdlc_graph` tool can find the graph file faster.
 
@@ -42,7 +60,7 @@ Example configuration in an MCP client:
   "mcpServers": {
     "chapter-context": {
       "command": "node",
-      "args": ["/path/to/mcp/chapter-context/dist/index.js"],
+      "args": ["/path/to/mcp/chapter-context/src/index.ts"],
       "env": {
         "CHAPTER_WORKSPACE": "/Users/you/Workspace/chapter-java"
       }

@@ -1,6 +1,6 @@
 {
   "name": "chapter-forge",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "banking SDLC harness — agents by RACI role, commands for the 8 phases, reference skills, guardrail hooks (block PII/secret + dangerous commands), a pipeline graph, and the chapter-context MCP that taps into context across the whole polyrepo.",
   "author": {
     "name": "Chapter Engineering"
@@ -9,9 +9,9 @@
   "mcpServers": {
     "chapter-context": {
       "command": "node",
-      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/chapter-context/dist/index.js"],
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/chapter-context/src/index.ts"],
       "env": {
-        "CHAPTER_WORKSPACE": "${CHAPTER_WORKSPACE}"
+        "CHAPTER_WORKSPACE": "${CHAPTER_WORKSPACE:-}"
       }
     }
   }

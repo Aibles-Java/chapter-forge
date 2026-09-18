@@ -3,7 +3,7 @@
  * chapter-context — MCP server (stdio) providing project-wide context for the
  * banking polyrepo. Fully read-only: no write/delete tools.
  *
- * Run: node dist/index.js  (workspace root via env CHAPTER_WORKSPACE or auto-detected).
+ * Run: node src/index.ts  (Node >= 22.18 strips types natively; workspace root via env CHAPTER_WORKSPACE or auto-detected).
  */
 import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -20,9 +20,9 @@ import {
   safeReadDir,
   safeReadFile,
   walkFiles,
-} from "./workspace.js";
-import { searchText } from "./search.js";
-import { parseYaml } from "./yaml-lite.js";
+} from "./workspace.ts";
+import { searchText } from "./search.ts";
+import { parseYaml } from "./yaml-lite.ts";
 
 const WORKSPACE = resolveWorkspace();
 
@@ -71,7 +71,7 @@ function listRepos(): { name: string; abs: string; kind: string }[] {
 /**
  * Find the SDLC graph:
  * 1. env CLAUDE_PLUGIN_ROOT + /graph/sdlc-graph.yaml
- * 2. walk up relatively from the dist file location to the plugin root (which contains graph/).
+ * 2. walk up relatively from this source file to the plugin root (which contains graph/).
  */
 function findSdlcGraph(): string | null {
   const envRoot = process.env.CLAUDE_PLUGIN_ROOT?.trim();
@@ -79,7 +79,7 @@ function findSdlcGraph(): string | null {
     const p = join(envRoot, "graph", "sdlc-graph.yaml");
     if (existsSync(p)) return p;
   }
-  // __dirname = <plugin>/mcp/chapter-context/dist → 3 levels up = plugin root.
+  // __dirname = <plugin>/mcp/chapter-context/src → 3 levels up = plugin root.
   const here = dirname(fileURLToPath(import.meta.url));
   let current = here;
   for (let i = 0; i < 6; i++) {

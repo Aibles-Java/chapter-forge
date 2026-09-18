@@ -18,7 +18,7 @@ A Claude Code plugin that packages the banking SDLC into: agents (roles), comman
 
 ## Quick tests
 - Hooks: `echo '{"tool_name":"Read","tool_input":{"file_path":"/x/.env"}}' | hooks/pretooluse-pii-secret-guard.sh` → expect `exit 2`.
-- MCP: `cd mcp/chapter-context && npm install && npm run build` → clean build.
+- MCP: `npm install && cd mcp/chapter-context && npm install && npm run typecheck` → clean typecheck (no build; Node runs `src/index.ts` directly).
 - JSON/YAML: validate with `jq` / `python3 -c "import yaml,..."`.
 
 ## Structure
