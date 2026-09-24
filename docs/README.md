@@ -17,6 +17,7 @@ Full usage guide for the plugin, organized so any team member can find "what do 
 - [10-guardrails.md](./10-guardrails.md) — every hook, what it blocks, how to test it
 - [11-roles.md](./11-roles.md) — use cases by role: what each role runs, approves, and reviews
 - [12-memory.md](./12-memory.md) — episodic/semantic/procedural project memory: schema, write/read path, `sdlc-remember`
+- [ROADMAP.md](./ROADMAP.md) — plugin's own roadmap: near/mid/long-term plan for the plugin itself
 - [settings.sample.json](./settings.sample.json) — optional project-level permission overlay
 
 ## Where to start
